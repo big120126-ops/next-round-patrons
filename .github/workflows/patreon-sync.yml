@@ -1,4 +1,4 @@
-# Patreon → patrons.json の定期同期
+# Patreon → patrons.json の定期同期（公開用リポジトリの .github/workflows/ へ置く）
 # 必要な secret: PATREON_ACCESS_TOKEN（Patreon の Creator's Access Token）
 name: Sync Patreon patrons
 
@@ -16,8 +16,11 @@ jobs:
     permissions:
       contents: write
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      # 🔑 サードパーティ Action はコミット SHA でピン留め（2026-09-01 レビュー指摘 #6・
+      #    タグは移動できるため）。SHA は actions/checkout と actions/setup-node の
+      #    v4 メジャータグが指すコミット（2026-09-01 に GitHub API で取得）。
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
         with:
           node-version: 20
       - name: Sync patrons from Patreon
@@ -27,7 +30,7 @@ jobs:
       - name: Commit if changed
         run: |
           git config user.name "patreon-sync-bot"
-          git config user.email "patreon-sync-bot@users.noreply.github.com"
+          git config user.email "actions@users.noreply.github.com"
           git add docs/patrons.json
           git diff --cached --quiet || git commit -m "chore: sync patrons from Patreon"
           git push
