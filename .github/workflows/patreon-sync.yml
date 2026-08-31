@@ -1,0 +1,33 @@
+# Patreon → patrons.json の定期同期
+# 必要な secret: PATREON_ACCESS_TOKEN（Patreon の Creator's Access Token）
+name: Sync Patreon patrons
+
+on:
+  schedule:
+    - cron: "*/15 * * * *"   # 15 分ごと
+  workflow_dispatch: {}       # 手動実行（mapping.json 更新後すぐ反映したいとき）
+  push:
+    paths:
+      - mapping.json          # 紐付け表を編集したら即同期
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Sync patrons from Patreon
+        run: node sync_patreon.mjs
+        env:
+          PATREON_ACCESS_TOKEN: ${{ secrets.PATREON_ACCESS_TOKEN }}
+      - name: Commit if changed
+        run: |
+          git config user.name "patreon-sync-bot"
+          git config user.email "patreon-sync-bot@users.noreply.github.com"
+          git add docs/patrons.json
+          git diff --cached --quiet || git commit -m "chore: sync patrons from Patreon"
+          git push
