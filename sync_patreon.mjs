@@ -45,10 +45,12 @@ const campaignId = campaigns.data[0].id;
 // ---- 2. アクティブ加入者をページングで全取得（ティア金額込み）----
 const members = [];
 const tierCents = new Map(); // tier id → amount_cents
+// ⚠ fields[member] から full_name を外してある（そもそも取得しない = ログにも出しようがない・
+//   2026-09-01 セキュリティレビュー指摘 #1。紐付けは member id で行う）
 let url =
   `/campaigns/${campaignId}/members` +
   `?include=currently_entitled_tiers` +
-  `&fields%5Bmember%5D=full_name,patron_status` +
+  `&fields%5Bmember%5D=patron_status` +
   `&fields%5Btier%5D=title,amount_cents` +
   `&page%5Bcount%5D=100`;
 while (url) {
@@ -77,7 +79,10 @@ for (const m of members) {
   const bucket = cents >= 1000 ? "ultra" : cents >= 500 ? "super" : "supporter";
   const vrcName = mapping[m.id];
   if (!vrcName) {
-    unmapped.push(`  未紐付け: member id=${m.id} (${m.attributes.full_name ?? "?"}) → mapping.json に追記してください`);
+    // ⚠ 氏名（full_name）はログに出さない（public リポジトリの Actions ログは誰でも読める・
+    //   2026-09-01 セキュリティレビュー指摘 #1）。member id は Patreon の管理画面
+    //   （Audience → 該当者のプロフィール URL 等）で突き合わせる。
+    unmapped.push(`  未紐付け: member id=${m.id} → mapping.json に追記してください`);
     continue;
   }
   out[bucket].push(vrcName);
@@ -109,7 +114,13 @@ const same =
   JSON.stringify([prev.ultra, prev.super, prev.supporter]) ===
     JSON.stringify([body.ultra, body.super, body.supporter]);
 
-if (same) {
+// 🔑 30 日ハートビート（2026-09-01 レビュー指摘 #10）: GitHub は public リポジトリが
+//   60 日間コミット無しだとスケジュール実行を自動停止する。名簿に変化が無くても
+//   30 日ごとに updated だけ書き直してコミットを作り、無活動 60 日に到達させない。
+let stale = false;
+try { stale = !!prev && Date.now() - Date.parse(prev.updated) > 30 * 24 * 3600 * 1000; } catch {}
+
+if (same && !stale) {
   console.log(`変更なし（ultra ${out.ultra.length} / super ${out.super.length} / supporter ${out.supporter.length}）`);
 } else {
   fs.mkdirSync("docs", { recursive: true });
