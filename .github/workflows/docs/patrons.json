@@ -1,0 +1,11 @@
+{
+  "updated": "2026-08-31T00:00:00Z",
+  "tiers": [
+    { "id": "ultra", "label": "ultra supporter" },
+    { "id": "super", "label": "super supporter" },
+    { "id": "supporter", "label": "supporter" }
+  ],
+  "ultra": [],
+  "super": [],
+  "supporter": []
+}
