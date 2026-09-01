@@ -7,7 +7,7 @@
     "_comment": "Patreon を経由しない手動枠（直接支援・動作確認用など）。ここに書いた名前はそのまま名簿（docs/patrons.json）へ載る。⚠ Patreon 退会でも自動では消えない = Patreon 加入者はここではなく上の member id 紐付けで登録する。⚠ docs/patrons.json の直接編集は次の同期で消えるので必ずこのファイルで行う。",
     "ultra": [],
     "super": [],
-    "supporter": ["test"]
+    "supporter": []
   },
 
   "aef1f293-ecc4-4b77-88b2-0820bfc408dc": "yuuri-"
