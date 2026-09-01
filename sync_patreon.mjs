@@ -87,6 +87,30 @@ for (const m of members) {
   }
   out[bucket].push(vrcName);
 }
+
+// ---- 3.5 手動枠（2026-09-01）: mapping.json の "_manual" に書いた名前をそのまま載せる ----
+// Patreon を経由しない支援者（直接支援・動作確認用など）のための枠。
+//   "_manual": { "ultra": [], "super": [], "supporter": ["VRChat表示名"] }
+// ⚠ docs/patrons.json を直接編集しても次の同期で上書きされて消える。手動の追加・削除は
+//   必ずこの "_manual" で行うこと（それが本節の存在理由）。
+// ⚠ ここも public リポジトリ。VRChat 表示名（掲示に出す前提の公開情報）以外は書かない。
+// Patreon 側と同名が重複したときは Patreon 側（上のループ）を優先して二重掲載を防ぐ。
+const manual =
+  mappingRaw._manual && typeof mappingRaw._manual === "object" ? mappingRaw._manual : {};
+{
+  const seen = new Set([...out.ultra, ...out.super, ...out.supporter]);
+  for (const k of Object.keys(out)) {
+    const add = Array.isArray(manual[k]) ? manual[k] : [];
+    for (const name of add) {
+      if (typeof name !== "string") continue;
+      const nm = name.trim();
+      if (!nm || seen.has(nm)) continue;
+      seen.add(nm);
+      out[k].push(nm);
+    }
+  }
+}
+
 for (const k of Object.keys(out)) out[k].sort((a, b) => a.localeCompare(b));
 
 if (unmapped.length) {

@@ -2,5 +2,11 @@
   "_comment": "Patreon member ↔ VRChat 表示名の紐付け表（唯一の手動ポイント）。key = Patreon の member id（同期実行ログの『未紐付け』行からコピー）/ value = VRChat の表示名そのまま。⚠ public リポジトリなのでメールアドレス等の個人情報は書かないこと。",
   "_example_do_not_use": {
     "12345678-abcd-...": "VRChatDisplayName"
+  },
+  "_manual": {
+    "_comment": "Patreon を経由しない手動枠（直接支援・動作確認用など）。ここに書いた名前はそのまま名簿（docs/patrons.json）へ載る。追加・削除はこのリストを編集して commit するだけ（push で即同期・cron でも15分毎）。⚠ docs/patrons.json の直接編集は次の同期で消えるので必ずここで行う。",
+    "ultra": [],
+    "super": [],
+    "supporter": ["yuuri-", "test"]
   }
 }
