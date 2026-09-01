@@ -4,9 +4,11 @@
     "12345678-abcd-...": "VRChatDisplayName"
   },
   "_manual": {
-    "_comment": "Patreon を経由しない手動枠（直接支援・動作確認用など）。ここに書いた名前はそのまま名簿（docs/patrons.json）へ載る。追加・削除はこのリストを編集して commit するだけ（push で即同期・cron でも15分毎）。⚠ docs/patrons.json の直接編集は次の同期で消えるので必ずここで行う。",
+    "_comment": "Patreon を経由しない手動枠（直接支援・動作確認用など）。ここに書いた名前はそのまま名簿（docs/patrons.json）へ載る。⚠ Patreon 退会でも自動では消えない = Patreon 加入者はここではなく上の member id 紐付けで登録する。⚠ docs/patrons.json の直接編集は次の同期で消えるので必ずこのファイルで行う。",
     "ultra": [],
     "super": [],
-    "supporter": ["yuuri-", "test"]
-  }
+    "supporter": ["test"]
+  },
+
+  "aef1f293-ecc4-4b77-88b2-0820bfc408dc": "yuuri-"
 }
