@@ -1,5 +1,5 @@
 {
-  "updated": "2026-09-01T03:24:46.764Z",
+  "updated": "2026-09-05T11:02:10.270Z",
   "tiers": [
     {
       "id": "ultra",
@@ -15,7 +15,9 @@
     }
   ],
   "ultra": [],
-  "super": [],
+  "super": [
+    "mokotic"
+  ],
   "supporter": [
     "yuuri-"
   ]
