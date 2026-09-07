@@ -1,5 +1,5 @@
 {
-  "updated": "2026-09-06T03:51:47.998Z",
+  "updated": "2026-09-07T13:54:39.381Z",
   "tiers": [
     {
       "id": "ultra",
@@ -14,7 +14,9 @@
       "label": "supporter"
     }
   ],
-  "ultra": [],
+  "ultra": [
+    "azarashi1"
+  ],
   "super": [
     "mokotic"
   ],
